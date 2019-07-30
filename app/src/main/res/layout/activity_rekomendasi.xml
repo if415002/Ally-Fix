@@ -1,9 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".RekomendasiActivity">
 
-</android.support.constraint.ConstraintLayout>
+  <android.support.design.widget.AppBarLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:fitsSystemWindows="true"
+      android:background="@android:color/white">
+  
+  <android.support.design.widget.CollapsingToolbarLayout
+      android:layout_width="match_parent"
+      android:fitsSystemWindows="true"
+      app:contentScrim="?attr/colorAccent"
+      app:expandedTitleTextAppearance="@android:color/transparent"
+      app:layout_scrollFlags="scroll|exitUntilCollapsed"
+      android:layout_height="250dp">
+
+      <ImageView
+          android:background="@android:color/white"
+          android:layout_width="wrap_content"
+          android:layout_height="250dp"
+          android:src="@drawable/starbucks"
+          android:contentDescription="true"
+          android:scaleType="centerCrop"/>
+  </android.support.design.widget.CollapsingToolbarLayout>
+  </android.support.design.widget.AppBarLayout>
+
+  <android.support.v4.widget.NestedScrollView
+      android:layout_marginTop="250dp"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rv">
+
+    </android.support.v7.widget.RecyclerView>
+  </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

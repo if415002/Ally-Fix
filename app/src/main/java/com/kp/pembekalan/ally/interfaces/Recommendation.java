@@ -1,10 +1,15 @@
 package com.kp.pembekalan.ally.interfaces;
 
-public class Recommendation {
+import android.net.Uri;
+
+import java.io.Serializable;
+
+public class Recommendation implements Serializable {
     private int id;
     private String name;
     private String description;
     private double price;
+    private String images;
 
     public int getId() {
         return id;
@@ -36,5 +41,13 @@ public class Recommendation {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getImages() {
+        return images;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
     }
 }

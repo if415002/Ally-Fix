@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -26,7 +27,16 @@ import com.androidhiddencamera.config.CameraRotation;
 import com.kp.pembekalan.ally.interfaces.APIServices;
 import com.kp.pembekalan.ally.interfaces.Recommendation;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,7 +51,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends HiddenCameraActivity {
     private static Retrofit retrofit;
-    private static String BASE_URL = "http://54.169.68.116:4000/";
+    public static String BASE_URL = "http://54.169.68.116:4000/";
     private static final int REQ_CODE_CAMERA_PERMISSION = 1253;
 
     private CameraConfig mCameraConfig;
@@ -112,15 +122,27 @@ public class MainActivity extends HiddenCameraActivity {
         }
     }
 
+
     @Override
     public void onImageCapture(@NonNull File imageFile) {
 
-        // Convert file to bitmap.
-        // Do something.
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         Bitmap bitmap = BitmapFactory.decodeFile( imageFile.getAbsolutePath(), options );
+        bitmap = Bitmap.createScaledBitmap(bitmap, 255, 257, false);
+//        FaceCropper mFaceCropper = new FaceCropper();
+//        mFaceCropper.getCroppedImage(bitmap);
 
+//        File file = new File(path, "FitnessGirl"+counter+".jpg"); // the File to save , append increasing numeric counter to prevent files from getting overwritten.
+        OutputStream fOut = null;
+        try {
+            fOut = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fOut); // saving the Bitmap to a file compressed as a JPEG with 85% compression rate
+            fOut.flush(); // Not really required
+            fOut.close(); // do not forget to close the stream
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         HashMap<String, RequestBody> map = new HashMap<>();
 //        map.put("latitude", createPartFromString(location.getLatitude() + ""));
@@ -140,7 +162,19 @@ public class MainActivity extends HiddenCameraActivity {
                     System.out.println(r.getName());
                     System.out.println(r.getDescription());
                     System.out.println(r.getPrice());
+                    System.out.println(r.getImages());
+
+
+                   /* Bitmap bitmap = getImageBitmap( BASE_URL + r.getImages() );
+                    ((ImageView) findViewById( R.id.cam_prev )).setImageBitmap( bitmap );*/
                 }
+
+                List<Recommendation> data = response.body();
+
+                Intent intent = new Intent( MainActivity.this, RekomendasiActivity.class );
+                intent.putExtra( "recommendations", new ArrayList<>(data) );
+                startActivity( intent );
+
             }
 
             @Override
@@ -150,7 +184,7 @@ public class MainActivity extends HiddenCameraActivity {
         });
 
         //Display the image to the image view
-        ((ImageView) findViewById( R.id.cam_prev )).setImageBitmap( bitmap );
+//        ((ImageView) findViewById( R.id.cam_prev )).setImageBitmap( bitmap );
     }
 
 
