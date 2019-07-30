@@ -28,8 +28,7 @@ public class RekomendasiActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(rvLinearLayoutManager);
 
-        RecommendationAdapter recommendationAdapter = new RecommendationAdapter( this.recommendationList );
+        RecommendationAdapter recommendationAdapter = new RecommendationAdapter( this.recommendationList, this );
         recyclerView.setAdapter( recommendationAdapter );
-
     }
 }

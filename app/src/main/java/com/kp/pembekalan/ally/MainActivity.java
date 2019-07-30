@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Network;
+import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -72,6 +75,11 @@ public class MainActivity extends HiddenCameraActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
 
+//        if (android.os.Build.VERSION.SDK_INT > 9) {
+//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//            StrictMode.setThreadPolicy(policy);
+//        }
+
         mCameraConfig = new CameraConfig()
                 .getBuilder( this )
                 .setCameraFacing( CameraFacing.FRONT_FACING_CAMERA )
@@ -122,6 +130,48 @@ public class MainActivity extends HiddenCameraActivity {
         }
     }
 
+    private class NetworkCall extends AsyncTask<Call<List<Recommendation>>, Void, List<Recommendation>> {
+        @Override
+        protected List<Recommendation> doInBackground(Call<List<Recommendation>>... params) {
+            try {
+                Call call = params[0];
+
+                return (List<Recommendation>)call.execute().body();
+//                call.enqueue(new Callback<List<Recommendation>>() {
+//                    @Override
+//                    public void onResponse(Call<List<Recommendation>> call, Response<List<Recommendation>> response) {
+//                        for (Recommendation r: response.body()) {
+//                            System.out.println(r.getId());
+//                            System.out.println(r.getName());
+//                            System.out.println(r.getDescription());
+//                            System.out.println(r.getPrice());
+//                            System.out.println(r.getImages());
+//
+//                   /* Bitmap bitmap = getImageBitmap( BASE_URL + r.getImages() );
+//                    ((ImageView) findViewById( R.id.cam_prev )).setImageBitmap( bitmap );*/
+//                        }
+//
+//                        return response.body();
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<Recommendation>> call, Throwable t) {
+//                        System.out.println("onFailure");
+//                    }
+                } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<Recommendation> result) {
+            Intent intent = new Intent( MainActivity.this, RekomendasiActivity.class );
+            intent.putExtra( "recommendations", new ArrayList<>(result) );
+            startActivity( intent );
+        }
+    }
 
     @Override
     public void onImageCapture(@NonNull File imageFile) {
@@ -129,9 +179,9 @@ public class MainActivity extends HiddenCameraActivity {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         Bitmap bitmap = BitmapFactory.decodeFile( imageFile.getAbsolutePath(), options );
-        bitmap = Bitmap.createScaledBitmap(bitmap, 255, 257, false);
 //        FaceCropper mFaceCropper = new FaceCropper();
-//        mFaceCropper.getCroppedImage(bitmap);
+//        bitmap = mFaceCropper.getCroppedImage(bitmap);
+        bitmap = Bitmap.createScaledBitmap(bitmap, 255, 257, false);
 
 //        File file = new File(path, "FitnessGirl"+counter+".jpg"); // the File to save , append increasing numeric counter to prevent files from getting overwritten.
         OutputStream fOut = null;
@@ -154,39 +204,11 @@ public class MainActivity extends HiddenCameraActivity {
 
         Call<List<Recommendation>> call = service.uploadImage(body, map);
 
-        call.enqueue(new Callback<List<Recommendation>>() {
-            @Override
-            public void onResponse(Call<List<Recommendation>> call, Response<List<Recommendation>> response) {
-                for (Recommendation r: response.body()) {
-                    System.out.println(r.getId());
-                    System.out.println(r.getName());
-                    System.out.println(r.getDescription());
-                    System.out.println(r.getPrice());
-                    System.out.println(r.getImages());
-
-
-                   /* Bitmap bitmap = getImageBitmap( BASE_URL + r.getImages() );
-                    ((ImageView) findViewById( R.id.cam_prev )).setImageBitmap( bitmap );*/
-                }
-
-                List<Recommendation> data = response.body();
-
-                Intent intent = new Intent( MainActivity.this, RekomendasiActivity.class );
-                intent.putExtra( "recommendations", new ArrayList<>(data) );
-                startActivity( intent );
-
-            }
-
-            @Override
-            public void onFailure(Call<List<Recommendation>> call, Throwable t) {
-                System.out.println("onFailure");
-            }
-        });
+        new NetworkCall().execute( call );
 
         //Display the image to the image view
 //        ((ImageView) findViewById( R.id.cam_prev )).setImageBitmap( bitmap );
     }
-
 
     @Override
     public void onCameraError(@CameraError.CameraErrorCodes int errorCode) {

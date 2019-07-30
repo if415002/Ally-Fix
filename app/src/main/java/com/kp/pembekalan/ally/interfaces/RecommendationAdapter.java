@@ -11,8 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.kp.pembekalan.ally.MainActivity;
 import com.kp.pembekalan.ally.R;
+import com.kp.pembekalan.ally.RekomendasiActivity;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -23,6 +26,7 @@ import java.util.List;
 
 public class RecommendationAdapter extends RecyclerView.Adapter<RecommendationAdapter.ViewHoldere> {
     private List<Recommendation> recommendationList;
+    private RekomendasiActivity rekomendasiActivity;
 
     private Bitmap getImageBitmap(String url) {
         Bitmap bm = null;
@@ -41,8 +45,9 @@ public class RecommendationAdapter extends RecyclerView.Adapter<RecommendationAd
         return bm;
     }
 
-    public RecommendationAdapter(List<Recommendation> recommendationList) {
+    public RecommendationAdapter(List<Recommendation> recommendationList, RekomendasiActivity rekomendasiActivity) {
         this.recommendationList = recommendationList;
+        this.rekomendasiActivity = rekomendasiActivity;
     }
 
     @NonNull
@@ -58,7 +63,14 @@ public class RecommendationAdapter extends RecyclerView.Adapter<RecommendationAd
         viewHoldere.txtName.setText( recommendationList.get( i ).getName() );
         viewHoldere.txtPrice.setText(""+ recommendationList.get( i ).getPrice() );
         viewHoldere.txtDescription.setText( recommendationList.get( i ).getDescription() );
-        viewHoldere.imageView.setImageBitmap( getImageBitmap( MainActivity.BASE_URL + recommendationList.get( i ).getImages()) );
+        // viewHoldere.imageView.setImageBitmap( getImageBitmap( MainActivity.BASE_URL + recommendationList.get( i ).getImages()) );
+
+        String url = MainActivity.BASE_URL + recommendationList.get(i).getImages();
+
+        Glide.with(viewHoldere.itemView.getContext())
+                .load(url)
+                .apply( new RequestOptions().override( 55, 55 ) )
+                .into(viewHoldere.imageView);
     }
 
     @Override
