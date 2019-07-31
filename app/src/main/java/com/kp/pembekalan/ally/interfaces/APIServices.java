@@ -20,5 +20,9 @@ public interface APIServices {
     @POST("/api/recommendation")
     Call<List<Recommendation>> uploadImage(@Part MultipartBody.Part photo,
                                            @PartMap Map<String, RequestBody> text);
+
+//    @Multipart
+//    @POST("/api/orders")
+//    Call<List<Order>> orderProduct
 }
 

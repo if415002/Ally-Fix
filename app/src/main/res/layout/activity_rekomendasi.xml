@@ -1,39 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:orientation="horizontal"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp"
+    android:weightSum="2"
     tools:context=".RekomendasiActivity">
+<!--
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">-->
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+<!--    </ScrollView>-->
+</RelativeLayout>
+
+<!--
   <android.support.design.widget.AppBarLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:fitsSystemWindows="true"
-      android:background="@android:color/white">
+      android:background="@android:color/white"
+      android:fitsSystemWindows="true">
 
-  <android.support.design.widget.CollapsingToolbarLayout
+    &lt;!&ndash; <android.support.design.widget.CollapsingToolbarLayout
       android:layout_width="match_parent"
+      android:layout_height="250dp"
       android:fitsSystemWindows="true"
       app:contentScrim="?attr/colorAccent"
       app:expandedTitleTextAppearance="@android:color/transparent"
-      app:layout_scrollFlags="scroll|exitUntilCollapsed"
-      android:layout_height="250dp">
+      app:layout_scrollFlags="scroll|exitUntilCollapsed">
+>
+  </android.support.design.widget.CollapsingToolbarLayout>&ndash;&gt;-->
 
-  </android.support.design.widget.CollapsingToolbarLayout>
-  </android.support.design.widget.AppBarLayout>
 
-  <!--<android.support.v4.widget.NestedScrollView-->
-      <!--android:layout_marginTop="250dp"-->
-      <!--android:layout_width="match_parent"-->
-      <!--android:layout_height="match_parent">-->
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/rv">
 
-    </android.support.v7.widget.RecyclerView>
-  <!--</android.support.v4.widget.NestedScrollView>-->
-</android.support.design.widget.CoordinatorLayout>
+
+ <!--   </android.support.v7.widget.RecyclerView>
+  </android.support.v4.widget.NestedScrollView>
+ &lt;!&ndash;</android.support.design.widget.AppBarLayout>&ndash;&gt;
+    </RelativeLayout>&ndash;&gt;-->
