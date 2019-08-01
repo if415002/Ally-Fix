@@ -50,8 +50,8 @@ public class RekomendasiActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_rekomendasi );
 
-       // recommendationList = (ArrayList<Recommendation>) getIntent().getSerializableExtra( "recommendations" );
-        orderList = (ArrayList<Order>) getIntent().getSerializableExtra( "order" );
+        recommendationList = (ArrayList<Recommendation>) getIntent().getSerializableExtra( "recommendations" );
+     //   orderList = (ArrayList<Order>) getIntent().getSerializableExtra( "order" );
 
         recyclerView = findViewById( R.id.rv );
 /*
