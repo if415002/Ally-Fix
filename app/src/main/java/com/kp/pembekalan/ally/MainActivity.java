@@ -158,7 +158,7 @@ public class MainActivity extends HiddenCameraActivity {
 //                    public void onFailure(Call<List<Recommendation>> call, Throwable t) {
 //                        System.out.println("onFailure");
 //                    }
-                } catch (IOException e1) {
+            } catch (IOException e1) {
                 e1.printStackTrace();
             }
 
@@ -175,7 +175,6 @@ public class MainActivity extends HiddenCameraActivity {
 
     @Override
     public void onImageCapture(@NonNull File imageFile) {
-
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         Bitmap bitmap = BitmapFactory.decodeFile( imageFile.getAbsolutePath(), options );
